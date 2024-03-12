@@ -1,6 +1,6 @@
 import { View } from 'react-native';
-import products from '@/assets/data/products';
-import ProductListItem from '@/src/components/ProducListItem';
+import products from '@assets/data/products';
+import ProductListItem from '@components/ProducListItem';
 
 export default function MenuScreen() {
   return (
