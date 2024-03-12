@@ -1,6 +1,7 @@
 import Colors from '@constants/Colors';
-import { Text, View, StyleSheet, Image } from 'react-native';
+import { Text, StyleSheet, Image, Pressable } from 'react-native';
 import { Product } from '../types';
+import { Link } from 'expo-router';
 
 export const defaultPizzaImage = 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/food/default.png'
 
@@ -10,20 +11,18 @@ type ProductListItemProps = {
 
 const ProductListItem = ({ product }: ProductListItemProps) => {
     return (
-        <View style={styles.container}>
-            {/* 
-                resizeMode's default is 'cover' meaning cover the whole area with image
-                while 'contain' adjusts itself to see the whole image 
-            */}
-            <Image 
-                source={{ uri: product.image || defaultPizzaImage }} 
-                style={styles.image} 
-                resizeMode='contain'
-            />
-            
-            <Text style={styles.title}>{product.name}</Text>
-            <Text style={styles.price}>{product.price}</Text>
-        </View>
+        <Link href={`/menu/${product.id}`} asChild>
+            <Pressable style={styles.container}>
+                <Image
+                    source={{ uri: product.image || defaultPizzaImage }}
+                    style={styles.image}
+                    resizeMode='contain'
+                />
+
+                <Text style={styles.title}>{product.name}</Text>
+                <Text style={styles.price}>{product.price}</Text>
+            </Pressable>
+        </Link>
     )
 }
 
@@ -51,3 +50,15 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     }
 });
+
+/* 
+    <Image />
+    - resizeMode's default is 'cover' meaning cover the whole area with image
+    - while 'contain' adjusts itself to see the whole image 
+
+    asChild
+    - lets you combine the actions of two components into one
+
+    href={`/menu/${product.id}`}
+    - can skip the (tabs), because DIR/path with parenthesis is optional
+*/
