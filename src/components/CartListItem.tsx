@@ -8,18 +8,22 @@ import { FontAwesome } from '@expo/vector-icons';
 import { useCart } from '../providers/CartProvider';
 
 type CartListItemProps = {
-    cartItem: CartItem;
-};
+    cartItem: CartItem; // inherit the properties of props from types.ts/CartItem
+}; 
 
+// Specific item on the cart
 const CartListItem = ({ cartItem }: CartListItemProps) => {
     const { updateQuantity } = useCart();
     return (
         <View style={styles.container}>
+            {/* Image */}
             <Image
                 source={{ uri: cartItem.product.image || defaultPizzaImage }}
                 style={styles.image}
                 resizeMode="contain"
             />
+
+            {/* Name and Price */}
             <View style={{ flex: 1 }}>
                 <Text style={styles.title}>{cartItem.product.name}</Text>
                 <View style={styles.subtitleContainer}>
@@ -27,15 +31,21 @@ const CartListItem = ({ cartItem }: CartListItemProps) => {
                     <Text>Size: {cartItem.size}</Text>
                 </View>
             </View>
+
+            {/* Quantity */}
             <View style={styles.quantitySelector}>
+                {/* -1 to quantity */}
                 <FontAwesome
                     onPress={() => updateQuantity(cartItem.id, -1)}
                     name="minus"
                     color="gray"
                     style={{ padding: 5 }}
                 />
-
+                
+                {/* Quantity Count */}
                 <Text style={styles.quantity}>{cartItem.quantity}</Text>
+
+                {/* +1 to quantity */}
                 <FontAwesome
                     onPress={() => updateQuantity(cartItem.id, 1)}
                     name="plus"
@@ -88,3 +98,11 @@ const styles = StyleSheet.create({
 });
 
 export default CartListItem;
+
+/*
+    const CartListItem = ({ cartItem }: CartListItemProps)
+    - the props(cartItem) will change depending from the provider
+
+    updateQuantity()
+    - changes the "items" in provider
+*/

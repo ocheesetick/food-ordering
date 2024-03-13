@@ -8,26 +8,36 @@ import { useCart } from '@/providers/CartProvider'
 import { PizzaSize } from '@/types'
 import { useRouter } from 'expo-router'
 
-const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL']
+// These are the only acceptable types based on typse.ts/PizzaSize
+const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL'] 
 
 const ProductDetailsScreen = () => {
-    const { id } = useLocalSearchParams() // Returns string type
+    const { id } = useLocalSearchParams() // Returns string type url param
     const { addItem } = useCart()
 
-    const router = useRouter()
+    const router = useRouter() // alternative to link to go-to a route
 
-    const [selectedSize, setSelectedSize] = useState<PizzaSize>('M')
+    // State that has a PizzaSize as a type
+    const [selectedSize, setSelectedSize] = useState<PizzaSize>('S')
 
+    // Find in dummy data products that has same id as param id
     const product = products.find((p) => p.id.toString() === id)
 
+    // Add to cart functionality
     const addToCart = () => {
+        // Check product if null
         if(!product) {
             return 
         }
+
+        // insert to addItem specific product and size
         addItem(product, selectedSize)
+
+        // go-to route modal /cart screen
         router.push('/cart')
     }
 
+    // Catch if product is empty to use this safely in the following code
     if (!product) {
         return <Text>Product not found</Text>
     }

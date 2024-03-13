@@ -50,12 +50,15 @@ function RootLayoutNav() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+
+      {/* To access values anywhere in (tabs) or cart */}
       <CartProvider>
         <Stack>
           <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="cart" options={{ presentation: 'modal' }} />
+          <Stack.Screen name="cart" options={{ presentation: 'modal' }} /> 
         </Stack>
       </CartProvider>
+
     </ThemeProvider>
   );
 }

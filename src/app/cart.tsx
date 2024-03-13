@@ -4,11 +4,13 @@ import { useContext} from 'react';
 import { useCart } from '@/providers/CartProvider'
 import CartListItem from '@/components/CartListItem';
 
+// Main Cart modal page
 const CartScreen = () => {
-    const { items } = useCart() // Consume the contents of CartContex
+    const { items } = useCart() // access the chosen items from provider
 
     return (
         <View>
+            {/* Render items added to cart */}
             <FlatList
                 data={items}
                 renderItem={({item}) => <CartListItem cartItem={item} />}
