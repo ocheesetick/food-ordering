@@ -5,17 +5,18 @@ import { randomUUID } from 'expo-crypto'
 
 // Create type for context
 type CartType = {
-    items: CartItem[], // array holds all the CartItem objects
-    addItem: (product: Product, size: CartItem['size']) => void, // function(product, size)
+    items: CartItem[] // array holds all the CartItem objects
+    addItem: (product: Product, size: CartItem['size']) => void // function(product, size)
     updateQuantity: (itemId: string, amount: -1 | 1) => void // function(itemId, amount)
-
+    total: number
 }
 
 // Context that has a type of CartType
 const CartContext = createContext<CartType>({
     items: [],
     addItem: () => { },
-    updateQuantity: () => { }
+    updateQuantity: () => { },
+    total: 0
 })
 
 const CartProvider = ({ children }: PropsWithChildren) => {
@@ -28,7 +29,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
         const existingItem = items.find((item) => item.product === product && item.size === size)
 
         // IF chosen already EXISTS, add quantity only
-        if(existingItem) {
+        if (existingItem) {
             updateQuantity(existingItem.id, 1)
             return
         }
@@ -42,7 +43,7 @@ const CartProvider = ({ children }: PropsWithChildren) => {
             quantity: 1
         }
         // Add newCartItem and spread/append the existing items
-        setItems([newCartItem, ...items]) 
+        setItems([newCartItem, ...items])
     }
 
     // Update Quantity
@@ -57,10 +58,10 @@ const CartProvider = ({ children }: PropsWithChildren) => {
         console.log("AFTER update", items)
     }
 
+    const total = items.reduce((sum, item) => (sum += item.product.price * item.quantity), 0)
+
     return (
-        <CartContext.Provider
-            value={{ items, addItem, updateQuantity }}
-        >
+        <CartContext.Provider value={{ items, addItem, updateQuantity, total }}>
             {children}
         </CartContext.Provider>
     )
