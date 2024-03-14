@@ -1,6 +1,7 @@
 # Setup
 - create src/ and move inside the DIRs: app, components, constants
 - `npx expo install expo-crypto` to generate UUID/uinique ids
+- `npx expo install expo-image-picker` for image picker
 
 # Practices
 - Inside the src should be app, components, constants
