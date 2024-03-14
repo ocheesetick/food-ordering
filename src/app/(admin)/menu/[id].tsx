@@ -1,4 +1,4 @@
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { Link, Stack, useLocalSearchParams } from 'expo-router'
 import { Image, View, Text, StyleSheet, Pressable } from 'react-native'
 import products from '@assets/data/products'
 import { defaultPizzaImage } from '@/components/ProducListItem'
@@ -7,9 +7,11 @@ import Button from '@/components/Button'
 import { useCart } from '@/providers/CartProvider'
 import { PizzaSize } from '@/types'
 import { useRouter } from 'expo-router'
+import { FontAwesome } from '@expo/vector-icons'
+import Colors from '@/constants/Colors'
 
 // These are the only acceptable types based on typse.ts/PizzaSize
-const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL'] 
+const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL']
 
 const ProductDetailsScreen = () => {
     const { id } = useLocalSearchParams() // Returns string type url param
@@ -26,8 +28,8 @@ const ProductDetailsScreen = () => {
     // Add to cart functionality
     const addToCart = () => {
         // Check product if null
-        if(!product) {
-            return 
+        if (!product) {
+            return
         }
 
         // insert to addItem specific product and size
@@ -44,13 +46,33 @@ const ProductDetailsScreen = () => {
 
     return (
         <View style={styles.container}>
+
+            <Stack.Screen
+                options={{
+                    title: 'Menu',
+                    headerRight: () => (
+                        <Link href={`/(admin)/menu/create?id=${id}`} asChild>
+                            <Pressable>
+                                {({ pressed }) => (
+                                    <FontAwesome
+                                        name="pencil"
+                                        size={25}
+                                        color={Colors.light.tint}
+                                        style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
+                                    />
+                                )}
+                            </Pressable>
+                        </Link>
+                    ),
+                }} />
+
             {/* To customize the current screen */}
             <Stack.Screen options={{ title: product.name }} />
 
             <Image
                 source={{ uri: product.image || defaultPizzaImage }}
                 style={styles.image}
-            />            
+            />
 
             <Text style={styles.title}>{product.name}</Text>
             <Text style={styles.price}>${product.price}</Text>
