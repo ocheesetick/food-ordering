@@ -3,6 +3,7 @@
 - `npx expo install expo-crypto` to generate UUID/uinique ids
 - `npx expo install expo-image-picker` for image picker
 - `npm install dayjs` to display date in a readable way
+- link to install Material Top Tab Navigator > https://reactnavigation.org/docs/material-top-tab-navigator/
 
 # Note
 - Inside the src should be app, components, constants
