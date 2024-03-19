@@ -1,29 +1,29 @@
 import { Link, Stack, useLocalSearchParams } from 'expo-router'
-import { Image, View, Text, StyleSheet, Pressable } from 'react-native'
-import products from '@assets/data/products'
+import { Image, View, Text, StyleSheet, Pressable, ActivityIndicator } from 'react-native'
 import { defaultPizzaImage } from '@/components/ProducListItem'
 import { useState } from 'react'
-import Button from '@/components/Button'
 import { useCart } from '@/providers/CartProvider'
 import { PizzaSize } from '@/types'
 import { useRouter } from 'expo-router'
 import { FontAwesome } from '@expo/vector-icons'
 import Colors from '@/constants/Colors'
+import { useProduct } from '@/api/products'
 
 // These are the only acceptable types based on typse.ts/PizzaSize
 const sizes: PizzaSize[] = ['S', 'M', 'L', 'XL']
 
 const ProductDetailsScreen = () => {
-    const { id } = useLocalSearchParams() // Returns string type url param
+    const { id: idString } = useLocalSearchParams() // Returns string type url param
+    const id = parseFloat(typeof idString === "string" ? idString : idString[0])
+
+    const { data: product, error, isLoading } = useProduct(id)
+
     const { addItem } = useCart()
 
     const router = useRouter() // alternative to link to go-to a route
 
     // State that has a PizzaSize as a type
     const [selectedSize, setSelectedSize] = useState<PizzaSize>('S')
-
-    // Find in dummy data products that has same id as param id
-    const product = products.find((p) => p.id.toString() === id)
 
     // Add to cart functionality
     const addToCart = () => {
@@ -39,8 +39,12 @@ const ProductDetailsScreen = () => {
         router.push('/cart')
     }
 
+    if (isLoading) {
+        return <ActivityIndicator />
+    }
+
     // Catch if product is empty to use this safely in the following code
-    if (!product) {
+    if (error) {
         return <Text>Product not found</Text>
     }
 

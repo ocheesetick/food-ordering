@@ -14,3 +14,9 @@
 - Have one component per file
 - In app.json add in `"experiment"`...`"tsconfigPaths": true`
 - In tsconfig.json add `baseUrl` and properties of `paths`
+
+# Supabase
+- RLS(Row Level Security) 
+    - policies that are created per table for authorizing access
+    - by default nobody is allowed to do anything unless one is root user/ admin of the project
+    - to create, go to table editor > three dots menu on table hover > view policies

@@ -21,7 +21,7 @@ export default function TabLayout() {
   const { isAdmin } = useAuth()
 
   // Protection/Guard to check if user is Admin
-  if (isAdmin) {
+  if (!isAdmin) {
     return <Redirect href={'/'} />
   }
 
