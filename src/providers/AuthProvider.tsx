@@ -34,6 +34,7 @@ export default function AuthProvider({ children }: PropsWithChildren) {
                     .eq('id', session.user.id)
                     .single();
                 setProfile(data || null);
+                console.log(profile)
             }
 
             setLoading(false)
