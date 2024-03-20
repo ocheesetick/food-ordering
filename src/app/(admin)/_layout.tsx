@@ -20,6 +20,7 @@ export default function TabLayout() {
 
   return (
     <Tabs
+      initialRouteName="menu"
       screenOptions={{
         tabBarActiveTintColor: Colors.light.background,
         tabBarInactiveTintColor: 'gainsboro',
@@ -27,9 +28,6 @@ export default function TabLayout() {
           backgroundColor: Colors.light.tint
         }
       }}>
-
-      {/* To hide to third tab "index" on bottom navigation bar */}
-      <Tabs.Screen name="index" options={{href: null}} /> 
 
       <Tabs.Screen
         name="menu"
