@@ -1,10 +1,12 @@
 import Button from '@/components/Button'
 import { defaultPizzaImage } from '@/components/ProducListItem'
 import Colors from '@/constants/Colors'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, TextInput, Image, Alert } from 'react-native'
 import * as ImagePicker from 'expo-image-picker';
 import { Stack, useLocalSearchParams } from 'expo-router'
+import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/api/products'
+import { useRouter } from 'expo-router'
 
 // Will also be reused for Update since elements required are same
 const CreateProductScreen = () => {
@@ -13,8 +15,24 @@ const CreateProductScreen = () => {
     const [errors, setErrors] = useState('')
     const [image, setImage] = useState<string | null>(null);
 
-    const { id } = useLocalSearchParams()
+    const { id: idString } = useLocalSearchParams()
+    const id = parseFloat(typeof idString === "string" ? idString : idString?.[0])
     const isUpdating = !!id
+
+    const router = useRouter()
+
+    const { mutate: insertProduct } = useInsertProduct()
+    const { mutate: updateProduct } = useUpdateProduct()
+    const { data: productData } = useProduct(id)
+    const { mutate: deleteProduct } = useDeleteProduct()
+
+    useEffect(() => {
+        if (productData) {
+            setName(productData.name)
+            setPrice(productData.price.toString())
+            setImage(productData.image)
+        }
+    }, [productData])
 
     const resetFields = () => {
         setName('')
@@ -51,11 +69,16 @@ const CreateProductScreen = () => {
             return
         }
 
+        // Save in the database
+        insertProduct({ name, price: parseFloat(price), image }, {
+            onSuccess: () => {
+                resetFields()
+                router.back()
+            }
+        })
+
         console.warn('Creating Product', name)
 
-        // Save in the database
-
-        resetFields()
     }
 
     const onUpdateCreate = () => {
@@ -66,8 +89,12 @@ const CreateProductScreen = () => {
         console.warn('Updating Product')
 
         // Save in the database
-
-        resetFields()
+        updateProduct({ id, name, image, price: parseFloat(price) }, {
+            onSuccess: () => {
+                resetFields()
+                router.back()
+            }
+        })
     }
 
     const pickImage = async () => {
@@ -87,6 +114,12 @@ const CreateProductScreen = () => {
     };
 
     const onDelete = () => {
+        deleteProduct(id, {
+            onSuccess: () => {
+                resetFields()
+                router.replace('/(admin)')
+            }
+        })
         console.warn("DELETE!")
     }
 
