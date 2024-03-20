@@ -34,7 +34,6 @@ export default function AuthProvider({ children }: PropsWithChildren) {
                     .eq('id', session.user.id)
                     .single();
                 setProfile(data || null);
-                console.log(profile)
             }
 
             setLoading(false)
@@ -44,6 +43,8 @@ export default function AuthProvider({ children }: PropsWithChildren) {
         supabase.auth.onAuthStateChange((_event, session) => {
             setSession(session)
         })
+
+        console.log(profile)
     }, [])
     return (
         <AuthContext.Provider value={{ session, loading, profile, isAdmin: profile?.group === 'ADMIN' }}>

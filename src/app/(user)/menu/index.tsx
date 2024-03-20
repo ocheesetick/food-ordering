@@ -30,7 +30,7 @@ export default function MenuScreen() {
           style={{
             alignSelf: 'flex-end',
             marginBottom: 35,
-            marginRight: 10
+            marginRight: 15
           }}
           name="exit"
           size={50}
