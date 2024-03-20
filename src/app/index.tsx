@@ -29,7 +29,7 @@ const index = () => {
                 <Button text="User" />
             </Link>
             {/* Going to (admin)/index */}
-            <Link href={'/(admin)'} asChild>
+            <Link href={'/(admin)/menu'} asChild>
                 <Button text="Admin" />
             </Link>
 
