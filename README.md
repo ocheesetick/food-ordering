@@ -20,3 +20,4 @@
     - policies that are created per table for authorizing access
     - by default nobody is allowed to do anything unless one is root user/ admin of the project
     - to create, go to table editor > three dots menu on table hover > view policies
+- Run whenever you have new tables `npx supabase gen types typescript --project-id your_project_id > src/database.types.ts`
