@@ -1,11 +1,12 @@
 import { ActivityIndicator, FlatList, Text } from 'react-native';
-import orders from '@assets/data/orders';
 import OrderListItem from '@/components/OrderListItem';
-import { Stack } from 'expo-router';
 import { useAdminOrderList } from '@/api/orders';
+import { useInsertOrderSubscription } from '@/api/subscriptions/subscriptions';
 
 export default function OrdersScreen() {
-    const { data: orders, error, isLoading } = useAdminOrderList({archived: false})
+    const { data: orders, error, isLoading } = useAdminOrderList({ archived: false })
+
+    useInsertOrderSubscription()
 
     if (isLoading) {
         return <ActivityIndicator />

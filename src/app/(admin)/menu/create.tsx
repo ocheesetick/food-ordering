@@ -7,6 +7,10 @@ import * as ImagePicker from 'expo-image-picker';
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { useDeleteProduct, useInsertProduct, useProduct, useUpdateProduct } from '@/api/products'
 import { useRouter } from 'expo-router'
+import * as FileSystem from'expo-file-system'
+import { randomUUID } from 'expo-crypto'
+import { supabase } from '@/lib/supabase'
+import { decode } from 'base64-arraybuffer'
 
 // Will also be reused for Update since elements required are same
 const CreateProductScreen = () => {
@@ -64,13 +68,15 @@ const CreateProductScreen = () => {
         }
     }
 
-    const onCreate = () => {
+    const onCreate = async () => {
         if (!validateInput()) {
             return
         }
 
+        const imagePath = await uploadImage()
+
         // Save in the database
-        insertProduct({ name, price: parseFloat(price), image }, {
+        insertProduct({ name, price: parseFloat(price), image: imagePath }, {
             onSuccess: () => {
                 resetFields()
                 router.back()
@@ -81,15 +87,15 @@ const CreateProductScreen = () => {
 
     }
 
-    const onUpdateCreate = () => {
+    const onUpdateCreate = async () => {
         if (!validateInput()) {
             return
         }
 
-        console.warn('Updating Product')
+        const imagePath = await uploadImage()
 
         // Save in the database
-        updateProduct({ id, name, image, price: parseFloat(price) }, {
+        updateProduct({ id, name, image: imagePath , price: parseFloat(price) }, {
             onSuccess: () => {
                 resetFields()
                 router.back()
@@ -117,11 +123,12 @@ const CreateProductScreen = () => {
         deleteProduct(id, {
             onSuccess: () => {
                 resetFields()
-                router.replace('/(admin)')
+                router.replace('/(admin)/menu')
             }
         })
         console.warn("DELETE!")
     }
+
 
     const confirmDelete = () => {
         Alert.alert("Confirm", "Are you sure you want to delete this product?", [
@@ -135,6 +142,25 @@ const CreateProductScreen = () => {
             }
         ])
     }
+
+    const uploadImage = async () => {
+        if (!image?.startsWith('file://')) {
+            return;
+        }
+
+        const base64 = await FileSystem.readAsStringAsync(image, {
+            encoding: 'base64',
+        });
+        const filePath = `${randomUUID()}.png`;
+        const contentType = 'image/png';
+        const { data, error } = await supabase.storage
+            .from('product-images')
+            .upload(filePath, decode(base64), { contentType });
+
+        if (data) {
+            return data.path;
+        }
+    };
 
     return (
         <View style={styles.container}>
