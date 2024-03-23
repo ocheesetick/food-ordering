@@ -7,7 +7,7 @@ import Button from '@/components/Button';
 
 // Main Cart modal page
 const CartScreen = () => {
-    const { items, total } = useCart() // access the chosen items from provider
+    const { items, total, checkout } = useCart() // access the chosen items from provider
 
     return (
         <View style={{ padding:10 }}>
@@ -19,7 +19,7 @@ const CartScreen = () => {
             />
 
             <Text style={{ marginTop: 20, fontSize:20, fontWeight: 'bold' }}>Total: ${total}</Text>
-            <Button text="Checkout" />
+            <Button onPress={checkout} text="Checkout" />
 
             <StatusBar style={Platform.OS === 'ios' ? 'light' : 'auto'} />
         </View>
